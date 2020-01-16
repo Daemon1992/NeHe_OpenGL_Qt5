@@ -14,9 +14,15 @@ QVector4D LightModelAmbient = QVector4D(0.2, 0.2, 0.2, 1.0);
 QVector4D MaterialDiffuse = QVector4D(0.8f, 0.8f, 0.8f, 1.0f);
 QVector4D MaterialAmbient = QVector4D(0.2f, 0.2f, 0.2f, 1.0f);
 
-TextureMappingWindow::TextureMappingWindow(QWindow *parent) :
-    OpenGLWindow(parent), m_xrot(0.0f), m_yrot(0.0f), m_xspeed(0.0f),
-    m_yspeed(0.0f), m_z(-5.0f), m_light(false), m_filter(0)
+TextureMappingWindow::TextureMappingWindow(QWidget *parent) :
+    OpenGLWindow(parent),
+    m_xrot(0.0f),
+    m_yrot(0.0f),
+    m_xspeed(0.0f),
+    m_yspeed(0.0f),
+    m_z(-5.0f),
+    m_light(false),
+    m_filter(0)
 {
 }
 
@@ -26,17 +32,24 @@ TextureMappingWindow::~TextureMappingWindow()
     glDeleteBuffers(2, &m_vboIds[0]);
 }
 
-void TextureMappingWindow::initialize()
+void TextureMappingWindow::initializeGL()
 {
+    initializeOpenGLFunctions();
+
     initGeometry();
     loadShader();
     loadGLTexture();
     glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-    glClearDepthf(1.0);
+    glClearDepth(1.0);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glDepthFunc(GL_LEQUAL);
+}
+
+void TextureMappingWindow::paintGL()
+{
+    render();
 }
 
 void TextureMappingWindow::render()

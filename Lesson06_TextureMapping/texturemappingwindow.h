@@ -3,22 +3,26 @@
 
 #include "openglwindow.h"
 #include <QOpenGLShaderProgram>
+#include <QTimer>
 
 class TextureMappingWindow : public OpenGLWindow
 {
     Q_OBJECT
 public:
-    explicit TextureMappingWindow(QWindow *parent = 0);
+    explicit TextureMappingWindow(QWidget *parent = 0);
     ~TextureMappingWindow();
 protected:
-    void initialize();
-    void render();
+    void initializeGL();
+    void paintGL();
+
 private:
     void loadGLTexture();
-
     void loadShader();
-private:
+    void render();
     void initGeometry();
+
+private slots:
+    void sltUpdateRatiaon();
 private:
     QOpenGLShaderProgram *m_program;
     GLuint m_posAttr;
@@ -28,6 +32,8 @@ private:
     GLfloat m_xrot;
     GLfloat m_yrot;
     GLfloat m_zrot;
+
+    QTimer m_timer;
 };
 
 #endif // TEXTUREMAPPINGWINDOW_H

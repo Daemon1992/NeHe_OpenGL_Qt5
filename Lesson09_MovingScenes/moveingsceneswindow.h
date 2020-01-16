@@ -16,17 +16,16 @@ public:
         GLfloat angle;
     }stars;
 
-    explicit MoveingScenesWindow(QWindow  *parent = 0);
+    explicit MoveingScenesWindow(QWidget  *parent = 0);
     ~MoveingScenesWindow();
 protected:
-    void initialize();
-    void render();
+    void initializeGL();
+    void paintGL();
     void keyPressEvent(QKeyEvent *event);
 private:
     void loadGLTexture();
-
     void loadShader();
-private:
+    void render();
     void initGeometry();
 private:
     QOpenGLShaderProgram *m_program;

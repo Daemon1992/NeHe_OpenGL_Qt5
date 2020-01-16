@@ -3,23 +3,28 @@
 
 #include "openglwindow.h"
 #include <QOpenGLShaderProgram>
+#include <QTimer>
 
 class TextureMappingWindow : public OpenGLWindow
 {
     Q_OBJECT
 public:
-    explicit TextureMappingWindow(QWindow *parent = 0);
+    explicit TextureMappingWindow(QWidget *parent = 0);
     ~TextureMappingWindow();
 protected:
-    void initialize();
-    void render();
+    void initializeGL();
+    void paintGL();
+
     void keyPressEvent(QKeyEvent *event);
 private:
     void loadGLTexture();
 
     void loadShader();
-private:
+
+    void render();
+
     void initGeometry();
+
 private:
     QOpenGLShaderProgram *m_program;
     GLuint m_posAttr;

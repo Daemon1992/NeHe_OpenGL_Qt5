@@ -10,10 +10,17 @@ void readStr(QTextStream *stream, QString &string)
     } while (string[0] == '/' || string[0] == '\n' || string.isEmpty());
 }
 
-WorldWindow::WorldWindow(QWindow *parent) :
-    OpenGLWindow(parent), m_program(NULL), m_blend(false),
-    m_yrot(0.0f), m_xpos(0.0f), m_zpos(0.0f), m_heading(0.0f),
-    m_walkbias(0.0f), m_walkbiasangle(0.0f), m_lookupdown(0.0f),
+WorldWindow::WorldWindow(QWidget *parent) :
+    OpenGLWindow(parent),
+    m_program(NULL),
+    m_blend(false),
+    m_yrot(0.0f),
+    m_xpos(0.0f),
+    m_zpos(0.0f),
+    m_heading(0.0f),
+    m_walkbias(0.0f),
+    m_walkbiasangle(0.0f),
+    m_lookupdown(0.0f),
     m_filter(0)
 {
 }
@@ -23,13 +30,15 @@ WorldWindow::~WorldWindow()
     glDeleteTextures(3, &m_texture[0]);
 }
 
-void WorldWindow::initialize()
+void WorldWindow::initializeGL()
 {
+    initializeOpenGLFunctions();
+
     loadShader();
     loadGLTexture();
     setupWorld();
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepthf(1.0);
+    glClearDepth(1.0);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
@@ -37,6 +46,11 @@ void WorldWindow::initialize()
     glDepthFunc(GL_LESS);
     glDisable(GL_BLEND);
     glBlendFuncSeparate(GL_SRC_ALPHA,GL_ONE,GL_SRC_ALPHA,GL_ONE);
+}
+
+void WorldWindow::paintGL()
+{
+    render();
 }
 
 void WorldWindow::render()
@@ -170,8 +184,9 @@ void WorldWindow::keyPressEvent(QKeyEvent *event)
             break;
         }
     }
-    renderNow();
     OpenGLWindow::keyPressEvent(event);
+
+    update();
 }
 
 void WorldWindow::setupWorld()

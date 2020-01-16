@@ -1,7 +1,10 @@
 #include "texturemappingwindow.h"
 
-TextureMappingWindow::TextureMappingWindow(QWindow *parent) :
-    OpenGLWindow(parent), m_xrot(0.0f), m_yrot(0.0f), m_zrot(0.0f),
+TextureMappingWindow::TextureMappingWindow(QWidget *parent) :
+    OpenGLWindow(parent),
+    m_xrot(0.0f),
+    m_yrot(0.0f),
+    m_zrot(0.0f),
     m_texture(-1)
 {
 }
@@ -11,17 +14,24 @@ TextureMappingWindow::~TextureMappingWindow()
     glDeleteTextures(1, &m_texture);
 }
 
-void TextureMappingWindow::initialize()
+void TextureMappingWindow::initializeGL()
 {
+    initializeOpenGLFunctions();
+
     initGeometry();
     loadShader();
     loadGLTexture();
     glEnable(GL_TEXTURE_2D);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepthf(1.0f);
+    glClearDepth(1.0f);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glDepthFunc(GL_LEQUAL);
+}
+
+void TextureMappingWindow::paintGL()
+{
+    render();
 }
 
 void TextureMappingWindow::render()

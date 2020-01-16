@@ -9,17 +9,20 @@ class TextureMappingWindow : public OpenGLWindow
 {
     Q_OBJECT
 public:
-    explicit TextureMappingWindow(QWindow *parent = 0);
+    explicit TextureMappingWindow(QWidget *parent = 0);
     ~TextureMappingWindow();
 protected:
-    void initialize();
-    void render();
+    void initializeGL();
+    void paintGL();
+
 private:
     void loadGLTexture();
 
     void loadShader();
 
     void initGeometry();
+
+    void render();
 private:
     QOpenGLShaderProgram *m_program;
     GLuint m_posAttr;

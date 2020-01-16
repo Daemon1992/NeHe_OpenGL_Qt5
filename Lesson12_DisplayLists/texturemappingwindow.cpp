@@ -32,8 +32,11 @@ static GLfloat topcol[5][4]=
     {0.0f,0.5f,0.5f,1.0}
 };
 
-TextureMappingWindow::TextureMappingWindow(QWindow *parent) :
-    OpenGLWindow(parent), m_texture(-1), m_xrot(0.0f), m_yrot(0.0f)
+TextureMappingWindow::TextureMappingWindow(QWidget *parent) :
+    OpenGLWindow(parent),
+    m_texture(-1),
+    m_xrot(0.0f),
+    m_yrot(0.0f)
 {
 }
 
@@ -43,17 +46,24 @@ TextureMappingWindow::~TextureMappingWindow()
     glDeleteBuffers(3, &m_vboIds[0]);
 }
 
-void TextureMappingWindow::initialize()
+void TextureMappingWindow::initializeGL()
 {
+    initializeOpenGLFunctions();
+
     initGeometry();
     loadShader();
     loadGLTexture();
     glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-    glClearDepthf(1.0);
+    glClearDepth(1.0);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glDepthFunc(GL_LEQUAL);
+}
+
+void TextureMappingWindow::paintGL()
+{
+    render();
 }
 
 void TextureMappingWindow::render()
@@ -139,8 +149,8 @@ void TextureMappingWindow::keyPressEvent(QKeyEvent *event)
             break;
         }
     }
-    renderNow();
     OpenGLWindow::keyPressEvent(event);
+    update();
 }
 
 void TextureMappingWindow::loadGLTexture()

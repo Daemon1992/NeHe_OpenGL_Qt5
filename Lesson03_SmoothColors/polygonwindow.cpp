@@ -1,6 +1,6 @@
 #include "polygonwindow.h"
 
-PolygonWindow::PolygonWindow(QWindow *parent) :
+PolygonWindow::PolygonWindow(QWidget *parent) :
     OpenGLWindow(parent), m_program(NULL)
 {
 }
@@ -10,11 +10,13 @@ PolygonWindow::~PolygonWindow()
     glDeleteBuffers(4,&m_vboIds[0]);
 }
 
-void PolygonWindow::initialize()
+void PolygonWindow::initializeGL()
 {
+    initializeOpenGLFunctions();
+
     initGeometry();
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepthf(1.0f);
+    glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
 
@@ -26,6 +28,11 @@ void PolygonWindow::initialize()
     m_colAttr = m_program->attributeLocation("colAttr");
 }
 
+void PolygonWindow::paintGL()
+{
+    render();
+}
+
 void PolygonWindow::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -33,9 +40,11 @@ void PolygonWindow::render()
     m_modelView.setToIdentity();
     m_modelView.translate(-1.5f, 0.0f, -6.0f);
     m_program->setUniformValue("mvpMatrix", m_projection * m_modelView);
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     m_program->enableAttributeArray(m_posAttr);
     m_program->setAttributeBuffer(m_posAttr, GL_FLOAT, 0, 3);
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[1]);
     m_program->enableAttributeArray(m_colAttr);
     m_program->setAttributeBuffer(m_colAttr, GL_FLOAT, 0, 3);

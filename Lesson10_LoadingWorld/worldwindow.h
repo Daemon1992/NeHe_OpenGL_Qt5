@@ -26,16 +26,17 @@ public:
         TRIANGLE* triangle;
     }SECTOR;
 
-    explicit WorldWindow(QWindow *parent = 0);
+    explicit WorldWindow(QWidget *parent = 0);
     ~WorldWindow();
 protected:
-    void initialize();
-    void render();
+    void initializeGL();
+    void paintGL();
     void keyPressEvent(QKeyEvent *event);
 private:
     void setupWorld();
     void loadShader();
     void loadGLTexture();
+    void render();
 private:
     QOpenGLShaderProgram *m_program;
     GLuint m_posAttr;

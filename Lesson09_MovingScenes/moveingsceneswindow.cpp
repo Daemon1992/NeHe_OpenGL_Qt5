@@ -1,9 +1,14 @@
 #include "moveingsceneswindow.h"
 
 const int starCount = 50;
-MoveingScenesWindow::MoveingScenesWindow(QWindow *parent) :
-    OpenGLWindow(parent), m_program(NULL), m_texture(-1),
-    m_twinkle(false), m_zoom(-15.0f), m_tilt(90.0f), m_spin(0.0f)
+MoveingScenesWindow::MoveingScenesWindow(QWidget *parent) :
+    OpenGLWindow(parent),
+    m_program(NULL),
+    m_texture(-1),
+    m_twinkle(false),
+    m_zoom(-15.0f),
+    m_tilt(90.0f),
+    m_spin(0.0f)
 {
 }
 
@@ -12,13 +17,15 @@ MoveingScenesWindow::~MoveingScenesWindow()
     glDeleteTextures(1, &m_texture);
 }
 
-void MoveingScenesWindow::initialize()
+void MoveingScenesWindow::initializeGL()
 {
+    initializeOpenGLFunctions();
+
     initGeometry();
     loadShader();
     loadGLTexture();
 
-    glClearDepthf(1.0);
+    glClearDepth(1.0);
     glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 
     glEnable(GL_TEXTURE_2D);
@@ -26,6 +33,11 @@ void MoveingScenesWindow::initialize()
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glBlendFuncSeparate(GL_SRC_ALPHA,GL_ONE,GL_SRC_ALPHA,GL_ONE);
+}
+
+void MoveingScenesWindow::paintGL()
+{
+    render();
 }
 
 void MoveingScenesWindow::render()
@@ -123,6 +135,8 @@ void MoveingScenesWindow::keyPressEvent(QKeyEvent *event)
         }
     }
     OpenGLWindow::keyPressEvent(event);
+
+    update();
 }
 
 void MoveingScenesWindow::loadGLTexture()

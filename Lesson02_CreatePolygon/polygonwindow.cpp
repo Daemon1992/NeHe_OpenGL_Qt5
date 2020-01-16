@@ -1,6 +1,6 @@
 #include "polygonwindow.h"
 
-PolygonWindow::PolygonWindow(QWindow *parent) :
+PolygonWindow::PolygonWindow(QWidget *parent) :
     OpenGLWindow(parent), m_program(NULL)
 {
 }
@@ -10,11 +10,13 @@ PolygonWindow::~PolygonWindow()
     glDeleteBuffers(2,&m_vboIds[0]);
 }
 
-void PolygonWindow::initialize()
+void PolygonWindow::initializeGL()
 {
+    initializeOpenGLFunctions();
+
     initGeometry();
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepthf(1.0f);
+    glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
 
@@ -23,6 +25,11 @@ void PolygonWindow::initialize()
     m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/fragshader.glsl");
     m_program->link();
     m_posAttr = m_program->attributeLocation("posAttr");
+}
+
+void PolygonWindow::paintGL()
+{
+    render();
 }
 
 void PolygonWindow::render()

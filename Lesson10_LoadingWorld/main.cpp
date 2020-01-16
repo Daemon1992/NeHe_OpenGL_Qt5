@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QSurfaceFormat format;
     format.setSamples(16);
@@ -12,6 +12,5 @@ int main(int argc, char *argv[])
     WorldWindow window;
     window.setFormat(format);
     window.show();
-    window.setAnimating(false);
     return app.exec();
 }
